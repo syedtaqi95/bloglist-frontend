@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import AddBlog from './components/addBlog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -8,6 +9,9 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -20,6 +24,7 @@ const App = () => {
     if (loggedInUserJSON) {
       const user = JSON.parse(loggedInUserJSON)
       setUser(user)
+      blogService.setToken(user.token)
     }
   }, [])
 
@@ -33,9 +38,8 @@ const App = () => {
       window.localStorage.setItem(
         'loggedInUser', JSON.stringify(user)
       )
+      blogService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
     } catch (e) {
       console.log(e)
     }
@@ -45,6 +49,33 @@ const App = () => {
     event.preventDefault()
     window.localStorage.removeItem('loggedInUser')
     setUser(null)
+    setUsername('')
+    setPassword('')
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+    blogService.setToken(null)
+  }
+
+  const handleAddBlog = async (event) => {
+    event.preventDefault()
+    try {
+      const newBlog = {
+        title: title,
+        author: author,
+        url: url,
+      }
+
+      const savedBlog = await blogService.create(newBlog)
+      setBlogs(blogs.concat(savedBlog))
+
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   // Login form
@@ -68,6 +99,7 @@ const App = () => {
             value={password}
             name="Password"
             onChange={({ target }) => setPassword(target.value)}
+            autoComplete="current-password"
           />
         </div>
         <button type="submit">login</button>
@@ -83,7 +115,17 @@ const App = () => {
         {user.name} logged in
         <button onClick={handleLogout}>logout</button>
       </p>
-      
+
+      <AddBlog
+        title={title}
+        setTitle={setTitle}
+        author={author}
+        setAuthor={setAuthor}
+        url={url}
+        setUrl={setUrl}
+        handleAddBlog={handleAddBlog}
+      />
+
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
