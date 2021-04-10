@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
-import AddBlog from './components/addBlog'
+import AddBlog from './components/AddBlog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
+  // State hooks
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -12,13 +14,17 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const [message, setMessage] = useState(null)
+  const [messageType, setMessageType] = useState(null)
 
+  // Get blogs on page refresh
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
     )
   }, [])
 
+  // Get loggedinUser from localStorage on page refresh
   useEffect(() => {
     const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
     if (loggedInUserJSON) {
@@ -28,6 +34,7 @@ const App = () => {
     }
   }, [])
 
+  // Login event handler
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -40,11 +47,18 @@ const App = () => {
       )
       blogService.setToken(user.token)
       setUser(user)
+      setMessage(`logged in as ${user.name}`)
+      setMessageType('success')
+      setTimeout(() => setMessage(null), 5000)
+
     } catch (e) {
-      console.log(e)
+      setMessage('wrong username or password')
+      setMessageType('error')
+      setTimeout(() => setMessage(null), 5000)
     }
   }
 
+  // Logout event handler
   const handleLogout = async (event) => {
     event.preventDefault()
     window.localStorage.removeItem('loggedInUser')
@@ -55,8 +69,12 @@ const App = () => {
     setAuthor('')
     setUrl('')
     blogService.setToken(null)
+    setMessage('logged out')
+    setMessageType('success')
+    setTimeout(() => setMessage(null), 5000)
   }
 
+  // Submit new blog event handler
   const handleAddBlog = async (event) => {
     event.preventDefault()
     try {
@@ -72,9 +90,14 @@ const App = () => {
       setTitle('')
       setAuthor('')
       setUrl('')
+      setMessage(`added "${savedBlog.title}" by ${savedBlog.author}`)
+      setMessageType('success')
+      setTimeout(() => setMessage(null), 5000)
 
     } catch (e) {
-      console.log(e)
+      setMessage(`Failed to add "${title}" by ${author}`)
+      setMessageType('error')
+      setTimeout(() => setMessage(null), 5000)
     }
   }
 
@@ -82,6 +105,9 @@ const App = () => {
   const loginForm = () => (
     <div>
       <h2>Log in to application</h2>
+
+      <Notification message={message} className={messageType} />
+
       <form onSubmit={handleLogin}>
         <div>
           username
@@ -111,6 +137,7 @@ const App = () => {
   const blogList = () => (
     <div>
       <h2>blogs</h2>
+      <Notification message={message} className={messageType} />
       <p>
         {user.name} logged in
         <button onClick={handleLogout}>logout</button>
