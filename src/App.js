@@ -75,7 +75,7 @@ const App = () => {
       blogFormRef.current.toggleVisibility()
       const savedBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(savedBlog))
-  
+
       setMessage(`added "${savedBlog.title}" by ${savedBlog.author}`)
       setMessageType('success')
       setTimeout(() => setMessage(null), 5000)
@@ -83,7 +83,7 @@ const App = () => {
       setMessage(`Failed to add "${blogObject.title}" by ${blogObject.author}`)
       setMessageType('error')
       setTimeout(() => setMessage(null), 5000)
-    }    
+    }
   }
 
   // Adds a like and sends a server request
@@ -97,12 +97,30 @@ const App = () => {
     try {
       const savedBlog = await blogService.update(updatedBlog)
       setBlogs(blogs.map(blog => blog.id === savedBlog.id ? savedBlog : blog))
-      
+
     } catch (e) {
       setMessage(`Failed to like "${blog.title}" by ${blog.author}`)
       setMessageType('error')
       setTimeout(() => setMessage(null), 5000)
     }
+  }
+
+  const deleteBlog = async (blogToDelete) => {
+    const prompt = `Remove blog '${blogToDelete.title}' by ${blogToDelete.author}?`
+    if (window.confirm(prompt)) {
+      try {
+        await blogService.remove(blogToDelete)
+        setBlogs(blogs.filter(blog => blog.id !== blogToDelete.id))
+      } catch (e) {
+        setMessage(`Failed to delete "${blogToDelete.title}" by ${blogToDelete.author}`)
+        setMessageType('error')
+        setTimeout(() => setMessage(null), 5000)
+      }
+    }
+  }
+
+  const displayRemove = (blogId) => {
+    return blogId === user.id ? '' : 'none'
   }
 
   // Login form
@@ -141,7 +159,9 @@ const App = () => {
   const blogList = () => (
     <div>
       <h2>blogs</h2>
+
       <Notification message={message} className={messageType} />
+
       <p>
         {user.name} logged in
         <button onClick={handleLogout}>logout</button>
@@ -154,17 +174,20 @@ const App = () => {
       {[...blogs]
         .sort((a, b) => b.likes - a.likes)
         .map(blog =>
-          <Blog key={blog.id} blog={blog} handleLikes={incrementLikes} />
-      )}
+          <Blog
+            key={blog.id}
+            blog={blog}
+            handleLikes={incrementLikes}
+            displayRemove={displayRemove(blog.user.id)}
+            handleRemove={deleteBlog}
+          />
+        )}
     </div>
   )
 
   return (
     <div>
-      {user === null ?
-        loginPage() :
-        blogList()
-      }
+      { user === null ? loginPage() : blogList()}
     </div>
   )
 }
