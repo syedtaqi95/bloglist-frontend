@@ -69,6 +69,7 @@ const App = () => {
     setTimeout(() => setMessage(null), 5000)
   }
 
+  // Sends a newly created blog to the server
   const addBlog = async (blogObject) => {
     try {
       blogFormRef.current.toggleVisibility()
@@ -83,6 +84,25 @@ const App = () => {
       setMessageType('error')
       setTimeout(() => setMessage(null), 5000)
     }    
+  }
+
+  // Adds a like and sends a server request
+  const incrementLikes = async (blog) => {
+    const updatedBlog = {
+      ...blog,
+      user: blog.user.id,
+      likes: blog.likes + 1
+    }
+
+    try {
+      const savedBlog = await blogService.update(updatedBlog)
+      setBlogs(blogs.map(blog => blog.id === savedBlog.id ? savedBlog : blog))
+      
+    } catch (e) {
+      setMessage(`Failed to like "${blog.title}" by ${blog.author}`)
+      setMessageType('error')
+      setTimeout(() => setMessage(null), 5000)
+    }
   }
 
   // Login form
@@ -117,7 +137,7 @@ const App = () => {
     </div>
   )
 
-  // Blogs list
+  // Main page
   const blogList = () => (
     <div>
       <h2>blogs</h2>
@@ -132,7 +152,7 @@ const App = () => {
       </Togglable>
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} handleLikes={incrementLikes} />
       )}
     </div>
   )
