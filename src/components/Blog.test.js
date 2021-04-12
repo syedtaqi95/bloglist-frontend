@@ -17,15 +17,12 @@ describe('<Blog />', () => {
     },
   }
 
-  beforeEach(() => {
+  test('renders only the title and author by default', () => {
     component = render(
       <Blog blog={blog} />
     )
-  })
 
-  test('renders only the title and author by default', () => {
     const div = component.container.querySelector('div')
-
     expect(div).toHaveTextContent(
       `${blog.title} ${blog.author}`
     )
@@ -34,13 +31,32 @@ describe('<Blog />', () => {
   })
 
   test('renders the url and likes, when the \'view\' button is clicked', () => {
-    const button = component.container.querySelector('.viewButton')
-    fireEvent.click(button)
+    component = render(
+      <Blog blog={blog} />
+    )
+
+    const viewButton = component.container.querySelector('.viewButton')
+    fireEvent.click(viewButton)
 
     const urlDiv = component.container.querySelector('.urlDiv')
     expect(urlDiv).toHaveTextContent(blog.url)
 
     const likesDiv = component.container.querySelector('.likesDiv')
     expect(likesDiv).toHaveTextContent(`${blog.likes}`)
+  })
+
+  test('if the like button is clicked twice, the event handler is called twice', () => {
+    const mockLikesHandler = jest.fn()
+    component = render(
+      <Blog blog={blog} handleLikes={mockLikesHandler} />
+    )
+    const viewButton = component.container.querySelector('.viewButton')
+    fireEvent.click(viewButton)
+
+    const likeButton = component.container.querySelector('.likeButton')
+    fireEvent.click(likeButton)
+    fireEvent.click(likeButton)
+
+    expect(mockLikesHandler.mock.calls).toHaveLength(2)
   })
 })

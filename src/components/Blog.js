@@ -27,7 +27,7 @@ const Blog = ({ blog, handleLikes, displayRemove, handleRemove }) => {
         </div>
         <div className = "likesDiv">
           likes {blog.likes}
-          <button onClick={() => handleLikes(blog)}>like</button>
+          <button onClick={() => handleLikes(blog)} className="likeButton">like</button>
         </div>
         <div>
           {blog.user.name}
