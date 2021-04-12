@@ -5,8 +5,6 @@ import Blog from './Blog'
 
 describe('<Blog />', () => {
 
-  let component
-
   const blog = {
     title: 'Test Blog Title',
     author: 'Test Author',
@@ -18,7 +16,7 @@ describe('<Blog />', () => {
   }
 
   test('renders only the title and author by default', () => {
-    component = render(
+    const component = render(
       <Blog blog={blog} />
     )
 
@@ -31,7 +29,7 @@ describe('<Blog />', () => {
   })
 
   test('renders the url and likes, when the \'view\' button is clicked', () => {
-    component = render(
+    const component = render(
       <Blog blog={blog} />
     )
 
@@ -47,7 +45,7 @@ describe('<Blog />', () => {
 
   test('if the like button is clicked twice, the event handler is called twice', () => {
     const mockLikesHandler = jest.fn()
-    component = render(
+    const component = render(
       <Blog blog={blog} handleLikes={mockLikesHandler} />
     )
     const viewButton = component.container.querySelector('.viewButton')
