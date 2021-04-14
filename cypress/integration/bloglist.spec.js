@@ -1,3 +1,12 @@
+Cypress.Commands.add('login', ({ username, password }) => {
+  cy.request('POST', 'http://localhost:3003/api/login', {
+    username, password
+  }).then(({ body }) => {
+    localStorage.setItem('loggedInUser', JSON.stringify(body))
+    cy.visit('http://localhost:3001')
+  })
+})
+
 describe('Blog app', function () {
   beforeEach(function () {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
@@ -33,6 +42,23 @@ describe('Blog app', function () {
 
       cy.get('html')
         .should('not.contain', 'Superuser logged in')
+    })
+  })
+
+  describe('When logged in', function () {
+    beforeEach(function () {
+      cy.login({ username: 'root', password: 'secret' })
+    })
+
+    it('a new blog can be created', function () {
+      cy.contains('create new blog').click()
+      cy.get('#title').type('Blog Title')
+      cy.get('#author').type('Blog author')
+      cy.get('#url').type('www.blog-url.com/this-is-a-blog')
+
+      cy.get('#create-button').click()
+
+      cy.contains('Blog Title Blog author')
     })
   })
 

@@ -180,7 +180,7 @@ const App = () => {
             key={blog.id}
             blog={blog}
             handleLikes={incrementLikes}
-            displayRemove={displayRemove(blog.user.id)}
+            displayRemove={displayRemove(blog.user ? blog.user.id : '')}
             handleRemove={deleteBlog}
           />
         )}
