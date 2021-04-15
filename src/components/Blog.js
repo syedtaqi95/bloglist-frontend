@@ -33,7 +33,7 @@ const Blog = ({ blog, handleLikes, displayRemove, handleRemove }) => {
           {blog.user.name}
         </div>
         <div style={{ display: displayRemove }}>
-          <button onClick = {() => handleRemove(blog)}>remove</button>
+          <button onClick = {() => handleRemove(blog)} className="removeButton">remove</button>
         </div>
       </div>
     )
