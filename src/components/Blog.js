@@ -17,7 +17,7 @@ const Blog = ({ blog, handleLikes, displayRemove, handleRemove }) => {
 
   if (showDetails) {
     return (
-      <div style={blogStyle}>
+      <div className="blogDetailedView" style={blogStyle}>
         <div>
           {blog.title} {blog.author}
           <button onClick={toggleVisibility}>hide</button>
@@ -40,7 +40,7 @@ const Blog = ({ blog, handleLikes, displayRemove, handleRemove }) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div className="blogSummaryView" style={blogStyle}>
       {blog.title} {blog.author}
       <button onClick={toggleVisibility} className="viewButton">view</button>
     </div>

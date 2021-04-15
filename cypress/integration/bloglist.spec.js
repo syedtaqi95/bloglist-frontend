@@ -7,11 +7,11 @@ Cypress.Commands.add('login', ({ username, password }) => {
   })
 })
 
-Cypress.Commands.add('createBlog', ({ title, author, url }) => {
+Cypress.Commands.add('createBlog', ({ title, author, url, likes = 0 }) => {
   cy.request({
     url: 'http://localhost:3003/api/blogs',
     method: 'POST',
-    body: { title, author, url },
+    body: { title, author, url, likes },
     headers: {
       'Authorization': `bearer ${JSON.parse(localStorage.getItem('loggedInUser')).token}`
     }
@@ -87,12 +87,58 @@ describe('Blog app', function () {
         cy.get('.likesDiv').should('contain', 'likes 1')
       })
 
-      it.only('it can be deleted', function () {
+      it('it can be deleted', function () {
         cy.get('.viewButton').click()
         cy.get('.removeButton').click()
         cy.get('html')
           .should('not.contain', 'Test Blog Title Firstname Lastname')
       })
+    })
+
+    describe('and multiple blogs exist', function () {
+      beforeEach(function () {
+        cy.createBlog({
+          title: 'Blog 1',
+          author: 'First Author',
+          url: 'www.some-url-1.com',
+          likes: 11,
+        })
+        cy.createBlog({
+          title: 'Blog 2',
+          author: 'Second Author',
+          url: 'www.some-url-2.com',
+          likes: 12,
+        })
+        cy.createBlog({
+          title: 'Blog 3',
+          author: 'Third Author',
+          url: 'www.some-url-3.com',
+          likes: 13,
+        })
+      })
+
+      it('blogs are displayed', function () {
+        cy.contains('Blog 1')
+        cy.contains('Blog 2')
+        cy.contains('Blog 3')
+      })
+
+      it('blogs are ordered by likes', function () {
+        // Expand the blogs to display the likes
+        cy.get('.blogSummaryView > button')
+          .click({ multiple: true })
+
+        cy.get('.blogDetailedView > .likesDiv')
+          .then((items) => {
+            const unsortedLikes = items
+              .map((i, el) => parseInt(el.innerText.substring(6, 8)))
+              .toArray()
+            const sortedLikes = [...unsortedLikes].sort().reverse()
+
+            expect(unsortedLikes).to.deep.equal(sortedLikes)
+          })
+      })
+
     })
   })
 
