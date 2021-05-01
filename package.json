@@ -46,6 +46,7 @@
     "cypress": "^7.1.0",
     "eslint-plugin-cypress": "^2.11.2",
     "eslint-plugin-jest": "^24.3.5",
+    "eslint-plugin-react-redux": "^3.3.2",
     "prop-types": "^15.7.2",
     "redux-devtools-extension": "^2.13.9"
   }
