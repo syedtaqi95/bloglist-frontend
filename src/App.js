@@ -5,6 +5,8 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import { useDispatch } from 'react-redux'
+import { setNotification } from './reducers/notificationReducer'
 
 const App = () => {
   // State hooks
@@ -12,8 +14,8 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [message, setMessage] = useState(null)
-  const [messageType, setMessageType] = useState(null)
+
+  const dispatch = useDispatch()
 
   // Refs
   const blogFormRef = useRef()
@@ -50,9 +52,7 @@ const App = () => {
       setUser(user)
 
     } catch (e) {
-      setMessage('wrong username or password')
-      setMessageType('error')
-      setTimeout(() => setMessage(null), 5000)
+      dispatch(setNotification('wrong username or password', 'error'))
     }
   }
 
@@ -64,9 +64,7 @@ const App = () => {
     setUsername('')
     setPassword('')
     blogService.setToken(null)
-    setMessage('logged out')
-    setMessageType('success')
-    setTimeout(() => setMessage(null), 5000)
+    dispatch(setNotification('logged out', 'success'))
   }
 
   // Sends a newly created blog to the server
@@ -76,13 +74,15 @@ const App = () => {
       const savedBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(savedBlog))
 
-      setMessage(`added "${savedBlog.title}" by ${savedBlog.author}`)
-      setMessageType('success')
-      setTimeout(() => setMessage(null), 5000)
+      dispatch(setNotification(
+        `added "${savedBlog.title}" by ${savedBlog.author}`,
+        'success'
+      ))
     } catch (e) {
-      setMessage(`Failed to add "${blogObject.title}" by ${blogObject.author}`)
-      setMessageType('error')
-      setTimeout(() => setMessage(null), 5000)
+      dispatch(setNotification(
+        `Failed to add "${blogObject.title}" by ${blogObject.author}`,
+        'error'
+      ))
     }
   }
 
@@ -99,9 +99,10 @@ const App = () => {
       setBlogs(blogs.map(blog => blog.id === savedBlog.id ? savedBlog : blog))
 
     } catch (e) {
-      setMessage(`Failed to like "${blog.title}" by ${blog.author}`)
-      setMessageType('error')
-      setTimeout(() => setMessage(null), 5000)
+      dispatch(setNotification(
+        `Failed to like "${blog.title}" by ${blog.author}`,
+        'error'
+      ))
     }
   }
 
@@ -111,10 +112,15 @@ const App = () => {
       try {
         await blogService.remove(blogToDelete)
         setBlogs(blogs.filter(blog => blog.id !== blogToDelete.id))
+        dispatch(setNotification(
+          `Deleted "${blogToDelete.title}" by ${blogToDelete.author}`,
+          'success'
+        ))
       } catch (e) {
-        setMessage(`Failed to delete "${blogToDelete.title}" by ${blogToDelete.author}`)
-        setMessageType('error')
-        setTimeout(() => setMessage(null), 5000)
+        dispatch(setNotification(
+          `Failed to delete "${blogToDelete.title}" by ${blogToDelete.author}`,
+          'error'
+        ))
       }
     }
   }
@@ -128,7 +134,7 @@ const App = () => {
     <div>
       <h2>Log in to application</h2>
 
-      <Notification message={message} className={messageType} />
+      <Notification />
 
       <form onSubmit={handleLogin}>
         <div>
@@ -162,7 +168,7 @@ const App = () => {
     <div>
       <h2>blogs</h2>
 
-      <Notification message={message} className={messageType} />
+      <Notification />
 
       <p>
         {user.name} logged in
