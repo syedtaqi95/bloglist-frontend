@@ -2,12 +2,11 @@ import React, { useRef } from 'react'
 
 import Blog from './Blog'
 import BlogForm from './BlogForm'
-import Notification from './Notification'
 import Togglable from './Togglable'
+import Header from './Header'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { createBlog, likeBlog, removeBlog } from '../reducers/blogReducer'
-import { logout } from '../reducers/userReducer'
 
 const BlogList = () => {
   // Redux
@@ -17,12 +16,6 @@ const BlogList = () => {
 
   // Refs
   const blogFormRef = useRef()
-
-  // Logout event handler
-  const handleLogout = (event) => {
-    event.preventDefault()
-    dispatch(logout())
-  }
 
   // Sends a newly created blog to the server
   const addBlog = (blogObject) => {
@@ -50,12 +43,7 @@ const BlogList = () => {
 
   return (
     <div>
-      <h2>blogs</h2>
-      <Notification />
-      <p>
-        {user.name} logged in
-        <button onClick={handleLogout}>logout</button>
-      </p>
+      <Header />
       <Togglable buttonLabel="create new blog" ref={blogFormRef}>
         <BlogForm addBlog={addBlog} />
       </Togglable>

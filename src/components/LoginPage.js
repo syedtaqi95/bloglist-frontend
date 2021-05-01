@@ -3,8 +3,8 @@ import React from 'react'
 import Notification from './Notification'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { setUsername, setPassword } from '../reducers/userReducer'
-import { login } from '../reducers/userReducer'
+import { setUsername, setPassword } from '../reducers/loginReducer'
+import { login } from '../reducers/loginReducer'
 
 const LoginPage = () => {
   const dispatch = useDispatch()

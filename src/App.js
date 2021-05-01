@@ -1,11 +1,14 @@
 import React, { useEffect } from 'react'
+import { Switch, Route } from 'react-router'
 
 import BlogList from './components/BlogList'
 import LoginPage from './components/LoginPage'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { initBlogs } from './reducers/blogReducer'
-import { setLoggedInUser } from './reducers/userReducer'
+import { setLoggedInUser } from './reducers/loginReducer'
+import Users from './components/Users'
+import { initUsers } from './reducers/userReducer'
 
 const App = () => {
   // Redux store
@@ -14,6 +17,9 @@ const App = () => {
 
   // Get blogs on page render
   useEffect(() => dispatch(initBlogs()), [])
+
+  // Get users on page render
+  useEffect(() => dispatch(initUsers()), [])
 
   // Get loggedinUser from localStorage on page render
   useEffect(() => {
@@ -26,7 +32,19 @@ const App = () => {
 
   return (
     <div>
-      { user === null ? <LoginPage /> : <BlogList />}
+      { user === null ?
+        <Route>
+          <LoginPage />
+        </Route> :
+        <Switch>
+          <Route path='/users'>
+            <Users />
+          </Route>
+          <Route path='/'>
+            <BlogList />
+          </Route>
+        </Switch>
+      }
     </div>
   )
 }
