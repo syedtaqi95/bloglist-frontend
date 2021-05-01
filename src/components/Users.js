@@ -1,7 +1,4 @@
 import React from 'react'
-
-import Header from './Header'
-
 import { useSelector } from 'react-redux'
 
 const Users = () => {
@@ -9,7 +6,6 @@ const Users = () => {
 
   return (
     <div>
-      <Header />
       <h2>Users</h2>
       <table>
         <thead>

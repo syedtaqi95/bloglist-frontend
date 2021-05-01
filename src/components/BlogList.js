@@ -3,7 +3,6 @@ import React, { useRef } from 'react'
 import Blog from './Blog'
 import BlogForm from './BlogForm'
 import Togglable from './Togglable'
-import Header from './Header'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { createBlog, likeBlog, removeBlog } from '../reducers/blogReducer'
@@ -43,7 +42,6 @@ const BlogList = () => {
 
   return (
     <div>
-      <Header />
       <Togglable buttonLabel="create new blog" ref={blogFormRef}>
         <BlogForm addBlog={addBlog} />
       </Togglable>

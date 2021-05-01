@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router'
 
 import BlogList from './components/BlogList'
 import LoginPage from './components/LoginPage'
+import Header from './components/Header'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { initBlogs } from './reducers/blogReducer'
@@ -36,14 +37,17 @@ const App = () => {
         <Route>
           <LoginPage />
         </Route> :
-        <Switch>
-          <Route path='/users'>
-            <Users />
-          </Route>
-          <Route path='/'>
-            <BlogList />
-          </Route>
-        </Switch>
+        <div>
+          <Header />
+          <Switch>
+            <Route path='/users'>
+              <Users />
+            </Route>
+            <Route path='/'>
+              <BlogList />
+            </Route>
+          </Switch>
+        </div>
       }
     </div>
   )
