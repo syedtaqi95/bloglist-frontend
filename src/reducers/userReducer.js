@@ -1,5 +1,6 @@
 import blogService from '../services/blogs'
 import loginService from '../services/login'
+import { setNotification, clearNotification } from './notificationReducer'
 
 const initialState = {
   username: '',
@@ -54,10 +55,18 @@ export const setLoggedInUser = (user) => {
 
 export const login = (username, password) => {
   return async (dispatch) => {
-    const user = await loginService.login({
-      username, password
-    })
-    dispatch(setLoggedInUser(user))
+    try{
+      const user = await loginService.login({
+        username, password
+      })
+      dispatch(setLoggedInUser(user))
+      dispatch(setUsername(''))
+      dispatch(setPassword(''))
+      dispatch(clearNotification())
+    } catch (e) {
+      console.log(e)
+      dispatch(setNotification('wrong username or password', 'error'))
+    }
   }
 }
 
