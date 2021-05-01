@@ -58,7 +58,7 @@ const App = () => {
   }
 
   // Logout event handler
-  const handleLogout = async (event) => {
+  const handleLogout = (event) => {
     event.preventDefault()
     window.localStorage.removeItem('loggedInUser')
     setUser(null)
@@ -97,6 +97,7 @@ const App = () => {
     }
   }
 
+  // Asks for confirmation, then sends a delete request to the server
   const deleteBlog = (blogToDelete) => {
     const prompt = `Remove blog '${blogToDelete.title}' by ${blogToDelete.author}?`
     if (window.confirm(prompt)) {
@@ -115,6 +116,7 @@ const App = () => {
     }
   }
 
+  // Sets the display for 'Remove' button only if logged in user is the creator
   const displayRemove = (blogId) => {
     return blogId === user.id ? '' : 'none'
   }
