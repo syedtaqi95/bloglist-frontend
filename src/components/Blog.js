@@ -19,7 +19,7 @@ const Blog = ({ blog, handleLikes, displayRemove, handleRemove }) => {
     return (
       <div className="blogDetailedView" style={blogStyle}>
         <div>
-          {blog.title} {blog.author}
+          {blog.title} - {blog.author}
           <button onClick={toggleVisibility}>hide</button>
         </div>
         <div className="urlDiv">
@@ -41,7 +41,7 @@ const Blog = ({ blog, handleLikes, displayRemove, handleRemove }) => {
 
   return (
     <div className="blogSummaryView" style={blogStyle}>
-      {blog.title} {blog.author}
+      {blog.title} - {blog.author}
       <button onClick={toggleVisibility} className="viewButton">view</button>
     </div>
   )
