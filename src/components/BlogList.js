@@ -6,7 +6,6 @@ import Notification from './Notification'
 import Togglable from './Togglable'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { setNotification } from '../reducers/notificationReducer'
 import { createBlog, likeBlog, removeBlog } from '../reducers/blogReducer'
 import { logout } from '../reducers/userReducer'
 
@@ -23,54 +22,24 @@ const BlogList = () => {
   const handleLogout = (event) => {
     event.preventDefault()
     dispatch(logout())
-    dispatch(setNotification('logged out', 'success'))
   }
 
   // Sends a newly created blog to the server
   const addBlog = (blogObject) => {
-    try {
-      blogFormRef.current.toggleVisibility()
-      dispatch(createBlog(blogObject))
-      dispatch(setNotification(
-        `added "${blogObject.title}" by ${blogObject.author}`,
-        'success'
-      ))
-    } catch (e) {
-      dispatch(setNotification(
-        `Failed to add "${blogObject.title}" by ${blogObject.author}`,
-        'error'
-      ))
-    }
+    blogFormRef.current.toggleVisibility()
+    dispatch(createBlog(blogObject))
   }
 
   // Adds a like and sends a server request
   const incrementLikes = (blog) => {
-    try {
-      dispatch(likeBlog(blog))
-    } catch (e) {
-      dispatch(setNotification(
-        `Failed to like "${blog.title}" by ${blog.author}`,
-        'error'
-      ))
-    }
+    dispatch(likeBlog(blog))
   }
 
   // Asks for confirmation, then sends a delete request to the server
   const deleteBlog = (blogToDelete) => {
     const prompt = `Remove blog '${blogToDelete.title}' by ${blogToDelete.author}?`
     if (window.confirm(prompt)) {
-      try {
-        dispatch(removeBlog(blogToDelete))
-        dispatch(setNotification(
-          `Deleted "${blogToDelete.title}" by ${blogToDelete.author}`,
-          'success'
-        ))
-      } catch (e) {
-        dispatch(setNotification(
-          `Failed to delete "${blogToDelete.title}" by ${blogToDelete.author}`,
-          'error'
-        ))
-      }
+      dispatch(removeBlog(blogToDelete))
     }
   }
 

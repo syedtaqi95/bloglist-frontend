@@ -12,10 +12,10 @@ const App = () => {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user.loggedInUser)
 
-  // Get blogs on page refresh
+  // Get blogs on page render
   useEffect(() => dispatch(initBlogs()), [])
 
-  // Get loggedinUser from localStorage on page refresh
+  // Get loggedinUser from localStorage on page render
   useEffect(() => {
     const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
     if (loggedInUserJSON) {

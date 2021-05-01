@@ -71,10 +71,13 @@ export const login = (username, password) => {
 }
 
 export const logout = () => {
-  blogService.setToken(null)
-  window.localStorage.removeItem('loggedInUser')
-  return {
-    type: 'LOGOUT'
+  return (dispatch) => {
+    blogService.setToken(null)
+    window.localStorage.removeItem('loggedInUser')
+    dispatch(setNotification('logged out', 'success'))
+    dispatch({
+      type: 'LOGOUT'
+    })
   }
 }
 
