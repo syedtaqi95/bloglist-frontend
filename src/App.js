@@ -9,7 +9,6 @@ import Users from './components/Users'
 import { useDispatch, useSelector } from 'react-redux'
 import { initBlogs } from './reducers/blogReducer'
 import { setLoggedInUser } from './reducers/loginReducer'
-import { initUsers } from './reducers/userReducer'
 
 const App = () => {
   // Redux store
@@ -18,9 +17,6 @@ const App = () => {
 
   // Get blogs on page render
   useEffect(() => dispatch(initBlogs()), [])
-
-  // Get users on page render
-  useEffect(() => dispatch(initUsers()), [])
 
   // Get loggedinUser from localStorage on page render
   useEffect(() => {
