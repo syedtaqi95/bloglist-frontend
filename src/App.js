@@ -4,11 +4,11 @@ import { Switch, Route } from 'react-router'
 import BlogList from './components/BlogList'
 import LoginPage from './components/LoginPage'
 import Header from './components/Header'
+import Users from './components/Users'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { initBlogs } from './reducers/blogReducer'
 import { setLoggedInUser } from './reducers/loginReducer'
-import Users from './components/Users'
 import { initUsers } from './reducers/userReducer'
 
 const App = () => {
@@ -34,9 +34,7 @@ const App = () => {
   return (
     <div>
       { user === null ?
-        <Route>
-          <LoginPage />
-        </Route> :
+        <LoginPage /> :
         <div>
           <Header />
           <Switch>

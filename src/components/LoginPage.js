@@ -1,4 +1,5 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 
 import Notification from './Notification'
 
@@ -11,10 +12,13 @@ const LoginPage = () => {
   const username = useSelector(state => state.user.username)
   const password = useSelector(state => state.user.password)
 
+  const history = useHistory()
+
   // Login event handler
   const handleLogin = (event) => {
     event.preventDefault()
     dispatch(login(username, password))
+    history.push('/')
   }
 
   return (
