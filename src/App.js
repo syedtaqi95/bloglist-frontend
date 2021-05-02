@@ -1,22 +1,27 @@
 import React, { useEffect } from 'react'
-import { Switch, Route } from 'react-router'
+import { Switch, Route } from 'react-router-dom'
 
 import BlogList from './components/BlogList'
 import LoginPage from './components/LoginPage'
 import Header from './components/Header'
 import Users from './components/Users'
+import User from './components/User'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { initBlogs } from './reducers/blogReducer'
 import { setLoggedInUser } from './reducers/loginReducer'
+import { updateUsers } from './reducers/userReducer'
 
 const App = () => {
   // Redux store
   const dispatch = useDispatch()
-  const user = useSelector(state => state.user.loggedInUser)
+  const loggedInUser = useSelector(state => state.user.loggedInUser)
 
   // Get blogs on page render
   useEffect(() => dispatch(initBlogs()), [])
+
+  // Get users on page render
+  useEffect(() => dispatch(updateUsers()), [])
 
   // Get loggedinUser from localStorage on page render
   useEffect(() => {
@@ -29,11 +34,14 @@ const App = () => {
 
   return (
     <div>
-      { user === null ?
+      { loggedInUser === null ?
         <LoginPage /> :
         <div>
           <Header />
           <Switch>
+            <Route path='/users/:id'>
+              <User />
+            </Route>
             <Route path='/users'>
               <Users />
             </Route>

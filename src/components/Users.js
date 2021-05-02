@@ -1,15 +1,10 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { useSelector, useDispatch } from 'react-redux'
-import { updateUsers } from '../reducers/userReducer'
+import { useSelector } from 'react-redux'
 
 const Users = () => {
   const users = useSelector(state => state.users)
-  const dispatch = useDispatch()
-
-  // Get users on page render
-  useEffect(() => dispatch(updateUsers()), [])
 
   return (
     <div>

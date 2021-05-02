@@ -1,5 +1,6 @@
 import blogService from '../services/blogs'
 import { setNotification } from './notificationReducer'
+import { updateUsers } from '../reducers/userReducer'
 
 const reducer = (state = [], action) => {
   switch (action.type) {
@@ -43,6 +44,7 @@ export const createBlog = (blog) => {
         type: 'ADD_BLOG',
         data: newBlog
       })
+      dispatch(updateUsers())
       dispatch(setNotification(
         `added "${blog.title}" by ${blog.author}`,
         'success'
@@ -86,6 +88,7 @@ export const removeBlog = (blog) => {
         type: 'DELETE_BLOG',
         data: blog
       })
+      dispatch(updateUsers())
       dispatch(setNotification(
         `Deleted "${blog.title}" by ${blog.author}`,
         'success'
