@@ -23,10 +23,6 @@ const Header = () => {
     padding : 5
   }
 
-  const margin = {
-    marginBottom : 5
-  }
-
   return (
     <div>
       <div>
@@ -38,7 +34,7 @@ const Header = () => {
       <p>
         {user.name} logged in
       </p>
-      <button onClick={handleLogout} style={margin}>logout</button>
+      <button onClick={handleLogout}>logout</button>
     </div>
   )
 }

@@ -6,6 +6,7 @@ import LoginPage from './components/LoginPage'
 import Header from './components/Header'
 import Users from './components/Users'
 import User from './components/User'
+import Blog from './components/Blog'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { initBlogs } from './reducers/blogReducer'
@@ -44,6 +45,9 @@ const App = () => {
             </Route>
             <Route path='/users'>
               <Users />
+            </Route>
+            <Route path='/blogs/:id'>
+              <Blog />
             </Route>
             <Route path='/'>
               <BlogList />

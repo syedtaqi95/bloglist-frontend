@@ -1,48 +1,61 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useHistory, useRouteMatch } from 'react-router-dom'
 
-const Blog = ({ blog, handleLikes, displayRemove, handleRemove }) => {
-  const [showDetails, setShowDetails] = useState(false)
+import { useSelector, useDispatch } from 'react-redux'
+import { likeBlog, removeBlog } from '../reducers/blogReducer'
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
+const Blog = () => {
+  const blogs = useSelector(state => state.blogs)
+  const loggedInUser = useSelector(state => state.user.loggedInUser)
+  const dispatch = useDispatch()
+
+  const history = useHistory()
+
+  // Find blog if in individual blog view
+  const match = useRouteMatch('/blogs/:id')
+  const blog = match
+    ? blogs.find(blog => blog.id === match.params.id)
+    : null
+
+  if (!blog) {
+    return null
   }
 
-  const toggleVisibility = () => {
-    setShowDetails(!showDetails)
+  // Adds a like and sends a server request
+  const handleLike = (blog) => {
+    dispatch(likeBlog(blog))
   }
 
-  if (showDetails) {
-    return (
-      <div className="blogDetailedView" style={blogStyle}>
-        <div>
-          {blog.title} - {blog.author}
-          <button onClick={toggleVisibility}>hide</button>
-        </div>
-        <div className="urlDiv">
-          {blog.url}
-        </div>
-        <div className = "likesDiv">
-          likes {blog.likes}
-          <button onClick={() => handleLikes(blog)} className="likeButton">like</button>
-        </div>
-        <div>
-          {blog.user.name}
-        </div>
-        <div style={{ display: displayRemove }}>
-          <button onClick = {() => handleRemove(blog)} className="removeButton">remove</button>
-        </div>
-      </div>
-    )
+  // Asks for confirmation, then sends a delete request to the server
+  const handleRemove = (blogToDelete) => {
+    const prompt = `Remove blog '${blogToDelete.title}' by ${blogToDelete.author}?`
+    if (window.confirm(prompt)) {
+      dispatch(removeBlog(blogToDelete))
+      history.push('/') // Redirect to home page
+    }
+  }
+
+  // Sets the display for 'Remove' button only if logged in user is the creator
+  const displayRemoveButton = () => {
+    return blog.user.id === loggedInUser.id ? '' : 'none'
   }
 
   return (
-    <div className="blogSummaryView" style={blogStyle}>
-      {blog.title} - {blog.author}
-      <button onClick={toggleVisibility} className="viewButton">view</button>
+    <div className="blogDetailedView">
+      <h2>{blog.title} - {blog.author}</h2>
+      <div className="urlDiv">
+        {blog.url}
+      </div>
+      <div className="likesDiv">
+        likes {blog.likes}
+        <button onClick={() => handleLike(blog)} className="likeButton">like</button>
+      </div>
+      <div>
+        added by {blog.user.name}
+      </div>
+      <div style={{ display: displayRemoveButton(blog) }}>
+        <button onClick={() => handleRemove(blog)} className="removeButton">remove</button>
+      </div>
     </div>
   )
 }

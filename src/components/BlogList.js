@@ -1,16 +1,15 @@
 import React, { useRef } from 'react'
+import { Link } from 'react-router-dom'
 
-import Blog from './Blog'
 import BlogForm from './BlogForm'
 import Togglable from './Togglable'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { createBlog, likeBlog, removeBlog } from '../reducers/blogReducer'
+import { createBlog } from '../reducers/blogReducer'
 
 const BlogList = () => {
   // Redux
   const blogs = useSelector(state => state.blogs)
-  const user = useSelector(state => state.user.loggedInUser)
   const dispatch = useDispatch()
 
   // Refs
@@ -22,22 +21,12 @@ const BlogList = () => {
     dispatch(createBlog(blogObject))
   }
 
-  // Adds a like and sends a server request
-  const incrementLikes = (blog) => {
-    dispatch(likeBlog(blog))
-  }
-
-  // Asks for confirmation, then sends a delete request to the server
-  const deleteBlog = (blogToDelete) => {
-    const prompt = `Remove blog '${blogToDelete.title}' by ${blogToDelete.author}?`
-    if (window.confirm(prompt)) {
-      dispatch(removeBlog(blogToDelete))
-    }
-  }
-
-  // Sets the display for 'Remove' button only if logged in user is the creator
-  const displayRemove = (blogId) => {
-    return blogId === user.id ? '' : 'none'
+  const blogStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: 'solid',
+    borderWidth: 1,
+    marginBottom: 5
   }
 
   return (
@@ -46,15 +35,11 @@ const BlogList = () => {
         <BlogForm addBlog={addBlog} />
       </Togglable>
       {[...blogs]
-        .sort((a, b) => b.likes - a.likes)
+        .sort((a, b) => b.likes - a.likes) // sorted by likes in descending order
         .map(blog =>
-          <Blog
-            key={blog.id}
-            blog={blog}
-            handleLikes={incrementLikes}
-            displayRemove={displayRemove(blog.user ? blog.user.id : '')}
-            handleRemove={deleteBlog}
-          />
+          <div key={blog.id} style={blogStyle}>
+            <Link to={`/blogs/${blog.id}`}>{blog.title} - {blog.author}</Link>
+          </div>
         )}
     </div>
   )
