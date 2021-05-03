@@ -56,6 +56,12 @@ const Blog = () => {
       <div style={{ display: displayRemoveButton(blog) }}>
         <button onClick={() => handleRemove(blog)} className="removeButton">remove</button>
       </div>
+      <h3>comments</h3>
+      <ul>
+        {blog.comments.map(comment => (
+          <li key={comment}>{comment}</li>
+        ))}
+      </ul>
     </div>
   )
 }
