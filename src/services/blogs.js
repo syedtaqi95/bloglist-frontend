@@ -35,6 +35,12 @@ const remove = async blogToDelete => {
   return response.data
 }
 
-const blogService = { getAll, setToken, create, update, remove }
+const comment = async (content, blogId) => {
+  const commentUrl = `${baseUrl}/${blogId}/comments`
+  const response = await axios.post(commentUrl, { comment: content })
+  return response.data
+}
+
+const blogService = { getAll, setToken, create, update, remove, comment }
 
 export default blogService

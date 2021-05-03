@@ -10,10 +10,10 @@ const reducer = (state = [], action) => {
   case 'ADD_BLOG':
     return [...state, action.data]
 
-  case 'LIKE_BLOG': {
-    const likedBlog = action.data
-    const likedId = likedBlog.id
-    return state.map(blog => blog.id === likedId ? likedBlog : blog)
+  case 'UPDATE_BLOG': {
+    const updatedBlog = action.data
+    const id = updatedBlog.id
+    return state.map(blog => blog.id === id ? updatedBlog : blog)
   }
 
   case 'DELETE_BLOG': {
@@ -68,7 +68,7 @@ export const likeBlog = (blog) => {
       }
       const receivedBlog = await blogService.update(updatedBlog)
       dispatch({
-        type: 'LIKE_BLOG',
+        type: 'UPDATE_BLOG',
         data: receivedBlog
       })
     } catch (e) {
@@ -96,6 +96,23 @@ export const removeBlog = (blog) => {
     } catch (e) {
       dispatch(setNotification(
         `Failed to delete "${blog.title}" by ${blog.author}`,
+        'error'
+      ))
+    }
+  }
+}
+
+export const commentOnBlog = (comment, blog) => {
+  return async dispatch => {
+    try {
+      const receivedBlog = await blogService.comment(comment, blog.id)
+      dispatch({
+        type: 'UPDATE_BLOG',
+        data: receivedBlog
+      })
+    } catch (e) {
+      dispatch(setNotification(
+        `Failed to comment on ${blog.title}`,
         'error'
       ))
     }

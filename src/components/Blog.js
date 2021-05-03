@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { likeBlog, removeBlog } from '../reducers/blogReducer'
+import { likeBlog, removeBlog, commentOnBlog } from '../reducers/blogReducer'
 
 const Blog = () => {
+  // React states
+  const [comment, setComment] = useState('')
+
+  // Redux
   const blogs = useSelector(state => state.blogs)
   const loggedInUser = useSelector(state => state.user.loggedInUser)
   const dispatch = useDispatch()
@@ -35,6 +39,13 @@ const Blog = () => {
     }
   }
 
+  // Add comment event handler
+  const handleAddComment = (e) => {
+    e.preventDefault()
+    dispatch(commentOnBlog(comment, blog))
+    setComment('')
+  }
+
   // Sets the display for 'Remove' button only if logged in user is the creator
   const displayRemoveButton = () => {
     return blog.user.id === loggedInUser.id ? '' : 'none'
@@ -43,6 +54,7 @@ const Blog = () => {
   return (
     <div className="blogDetailedView">
       <h3>{blog.title} - {blog.author}</h3>
+
       <div className="urlDiv">
         {blog.url}
       </div>
@@ -56,7 +68,18 @@ const Blog = () => {
       <div style={{ display: displayRemoveButton(blog) }}>
         <button onClick={() => handleRemove(blog)} className="removeButton">remove</button>
       </div>
+
       <h3>comments</h3>
+      <form onSubmit={handleAddComment}>
+        <input
+          type="text"
+          value={comment}
+          id="comment"
+          name="Comment"
+          onChange={({ target }) => setComment(target.value)}
+        />
+        <button type="submit">add comment</button>
+      </form>
       <ul>
         {blog.comments.map(comment => (
           <li key={comment}>{comment}</li>
