@@ -23,18 +23,20 @@ const Header = () => {
     padding : 5
   }
 
+  const bg = {
+    backgroundColor: '#d3d3d3'
+  }
+
   return (
     <div>
-      <div>
+      <div style={bg}>
         <Link to='/' style={padding}>blogs</Link>
         <Link to='/users' style={padding}>users</Link>
+        <span style={padding}>{user.name} logged in</span>
+        <button onClick={handleLogout}>logout</button>
       </div>
-      <h2>blogs</h2>
+      <h2>Blog app</h2>
       <Notification />
-      <p>
-        {user.name} logged in
-      </p>
-      <button onClick={handleLogout}>logout</button>
     </div>
   )
 }

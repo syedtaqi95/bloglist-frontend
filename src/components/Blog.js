@@ -42,7 +42,7 @@ const Blog = () => {
 
   return (
     <div className="blogDetailedView">
-      <h2>{blog.title} - {blog.author}</h2>
+      <h3>{blog.title} - {blog.author}</h3>
       <div className="urlDiv">
         {blog.url}
       </div>
