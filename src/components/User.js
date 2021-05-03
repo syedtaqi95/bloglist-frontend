@@ -2,6 +2,7 @@ import React from 'react'
 import { Link, useRouteMatch } from 'react-router-dom'
 
 import { useSelector } from 'react-redux'
+import { ListGroup } from 'react-bootstrap'
 
 const User = () => {
   const users = useSelector(state => state.users)
@@ -18,15 +19,15 @@ const User = () => {
 
   return (
     <div>
-      <h2>{user.name}</h2>
-      <h3>added blogs</h3>
-      <ul>
+      <h3>{user.name}</h3>
+      <h4>added blogs</h4>
+      <ListGroup>
         {user.blogs.map(blog => (
-          <li key={blog.id}>
-            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-          </li>
+          <ListGroup.Item key={blog.id}>
+            <Link to={`/blogs/${blog.id}`}><strong className="text-dark">{blog.title}</strong></Link>
+          </ListGroup.Item>
         ))}
-      </ul>
+      </ListGroup>
     </div>
   )
 }

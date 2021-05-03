@@ -1,5 +1,6 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
+import { Form, Button } from 'react-bootstrap'
 
 import Notification from './Notification'
 
@@ -25,20 +26,20 @@ const LoginPage = () => {
     <div>
       <h2>Log in to application</h2>
       <Notification />
-      <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input
+      <Form onSubmit={handleLogin}>
+        <Form.Group>
+          <Form.Label>Username</Form.Label>
+          <Form.Control
             type="text"
             id="username"
             value={username}
             name="Username"
             onChange={({ target }) => dispatch(setUsername(target.value))}
           />
-        </div>
-        <div>
-          password
-          <input
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Password</Form.Label>
+          <Form.Control
             type="password"
             id="password"
             value={password}
@@ -46,9 +47,9 @@ const LoginPage = () => {
             onChange={({ target }) => dispatch(setPassword(target.value))}
             autoComplete="current-password"
           />
-        </div>
-        <button type="submit" id="login-button">login</button>
-      </form>
+        </Form.Group>
+        <Button variant="info" type="submit" id="login-button">login</Button>
+      </Form>
     </div>
   )
 }

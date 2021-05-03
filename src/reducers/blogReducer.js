@@ -52,7 +52,7 @@ export const createBlog = (blog) => {
     } catch (e) {
       dispatch(setNotification(
         `Failed to add "${blog.title}" by ${blog.author}`,
-        'error'
+        'danger'
       ))
     }
   }
@@ -74,7 +74,7 @@ export const likeBlog = (blog) => {
     } catch (e) {
       dispatch(setNotification(
         `Failed to like "${blog.title}" by ${blog.author}`,
-        'error'
+        'danger'
       ))
     }
   }
@@ -96,7 +96,7 @@ export const removeBlog = (blog) => {
     } catch (e) {
       dispatch(setNotification(
         `Failed to delete "${blog.title}" by ${blog.author}`,
-        'error'
+        'danger'
       ))
     }
   }
@@ -113,7 +113,7 @@ export const commentOnBlog = (comment, blog) => {
     } catch (e) {
       dispatch(setNotification(
         `Failed to comment on ${blog.title}`,
-        'error'
+        'danger'
       ))
     }
   }

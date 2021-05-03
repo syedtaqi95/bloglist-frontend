@@ -34,7 +34,7 @@ const App = () => {
   }, [])
 
   return (
-    <div>
+    <div className="container bg-light">
       { loggedInUser === null ?
         <LoginPage /> :
         <div>

@@ -1,5 +1,6 @@
 import React, { useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { Card } from 'react-bootstrap'
 
 import BlogForm from './BlogForm'
 import Togglable from './Togglable'
@@ -21,25 +22,20 @@ const BlogList = () => {
     dispatch(createBlog(blogObject))
   }
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
-
   return (
     <div>
+      <br />
       <Togglable buttonLabel="create new blog" ref={blogFormRef}>
         <BlogForm addBlog={addBlog} />
       </Togglable>
       {[...blogs]
         .sort((a, b) => b.likes - a.likes) // sorted by likes in descending order
         .map(blog =>
-          <div key={blog.id} style={blogStyle}>
-            <Link to={`/blogs/${blog.id}`}>{blog.title} - {blog.author}</Link>
-          </div>
+          <Card key={blog.id} body>
+            <Link to={`/blogs/${blog.id}`}>
+              <strong className="text-dark">{blog.title} - {blog.author}</strong>
+            </Link>
+          </Card>
         )}
     </div>
   )

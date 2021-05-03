@@ -65,7 +65,7 @@ export const login = (username, password) => {
       dispatch(clearNotification())
     } catch (e) {
       console.log(e)
-      dispatch(setNotification('wrong username or password', 'error'))
+      dispatch(setNotification('wrong username or password', 'danger'))
     }
   }
 }

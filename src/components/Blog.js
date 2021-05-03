@@ -3,6 +3,7 @@ import { useHistory, useRouteMatch } from 'react-router-dom'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { likeBlog, removeBlog, commentOnBlog } from '../reducers/blogReducer'
+import { Button, Form, Row, Col, ListGroup } from 'react-bootstrap'
 
 const Blog = () => {
   // React states
@@ -55,36 +56,43 @@ const Blog = () => {
     <div className="blogDetailedView">
       <h3>{blog.title} - {blog.author}</h3>
 
-      <div className="urlDiv">
+      <a className="urlDiv" href={`https://${blog.url}`}>
         {blog.url}
-      </div>
+      </a>
       <div className="likesDiv">
         likes {blog.likes}
-        <button onClick={() => handleLike(blog)} className="likeButton">like</button>
+        <Button variant="info" onClick={() => handleLike(blog)} className="likeButton">like</Button>
       </div>
       <div>
         added by {blog.user.name}
       </div>
       <div style={{ display: displayRemoveButton(blog) }}>
-        <button onClick={() => handleRemove(blog)} className="removeButton">remove</button>
+        <Button variant="info" onClick={() => handleRemove(blog)} className="removeButton">remove</Button>
       </div>
 
       <h3>comments</h3>
-      <form onSubmit={handleAddComment}>
-        <input
-          type="text"
-          value={comment}
-          id="comment"
-          name="Comment"
-          onChange={({ target }) => setComment(target.value)}
-        />
-        <button type="submit">add comment</button>
-      </form>
-      <ul>
+      <Form onSubmit={handleAddComment}>
+        <Row>
+          <Col>
+            <Form.Control
+              type="text"
+              value={comment}
+              id="comment"
+              name="Comment"
+              onChange={({ target }) => setComment(target.value)}
+            />
+          </Col>
+          <Col>
+            <Button variant="info" type="submit">add comment</Button>
+          </Col>
+        </Row>
+      </Form>
+      <br />
+      <ListGroup>
         {blog.comments.map(comment => (
-          <li key={comment}>{comment}</li>
+          <ListGroup.Item key={comment}>{comment}</ListGroup.Item>
         ))}
-      </ul>
+      </ListGroup>
     </div>
   )
 }
